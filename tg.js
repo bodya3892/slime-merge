@@ -1,7 +1,7 @@
 // Платформа Telegram Mini Apps + реклама Adsgram.
 // Впиши сюда ID блоков из кабинета Adsgram (partner.adsgram.ai):
-var ADSGRAM_REWARD_BLOCK = '';   // блок Reward, только цифры, например '12345'
-var ADSGRAM_INTER_BLOCK = '';    // блок Interstitial, начинается с int-, например 'int-12345'
+var ADSGRAM_REWARD_BLOCK = '53971';   // блок Reward, только цифры
+var ADSGRAM_INTER_BLOCK = 'int-53972';    // блок Interstitial
 
 // Пока ID не вписаны (или игра открыта не в Telegram), награда за рекламу выдаётся сразу — для проверки.
 var Platform = {
