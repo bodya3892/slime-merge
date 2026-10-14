@@ -14,13 +14,15 @@
       title: 'Слаймы: Слияние', play: 'Играть', score: 'Очки', best: 'Рекорд', next: 'Далее',
       hint: 'Бросай слаймов и соединяй одинаковых — они сливаются в больших! Не дай им переползти красную линию.',
       over: 'Игра окончена', restart: 'Заново', contAd: 'Продолжить', paused: 'Пауза', resume: 'Продолжить',
-      newBest: 'Новый рекорд!', combo: 'Комбо', clean: 'Убрать мелких слаймов (реклама)', danger: 'Опасно!'
+      newBest: 'Новый рекорд!', combo: 'Комбо', clean: 'Убрать мелких слаймов (реклама)', danger: 'Опасно!',
+      noAd: 'Реклама пока недоступна, попробуй позже'
     },
     en: {
       title: 'Slime Merge', play: 'Play', score: 'Score', best: 'Best', next: 'Next',
       hint: 'Drop slimes and match the same ones — they merge into bigger slimes! Keep them below the red line.',
       over: 'Game Over', restart: 'Restart', contAd: 'Continue', paused: 'Paused', resume: 'Resume',
-      newBest: 'New record!', combo: 'Combo', clean: 'Remove small slimes (ad)', danger: 'Danger!'
+      newBest: 'New record!', combo: 'Combo', clean: 'Remove small slimes (ad)', danger: 'Danger!',
+      noAd: 'Ad is not available yet, try again later'
     }
   };
   var tr = TEXTS.ru;
@@ -467,8 +469,18 @@
     Platform.rewarded().then(function (ok) {
       state = prev;
       if (ok) onReward();
+      else toast(tr.noAd + (Platform.debug && Platform.adError ? '\n' + Platform.adError : ''));
       if (state === 'play') Platform.gameplay(true);
     });
+  }
+
+  var toastTimer = 0;
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.add('hidden'); }, Platform.debug ? 8000 : 2500);
   }
 
   // ---------- ввод ----------

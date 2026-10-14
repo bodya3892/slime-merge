@@ -69,3 +69,11 @@ h2 { font-size: calc(30px * var(--s)); }
   animation: pulse 1s infinite;
 }
 @keyframes pulse { 50% { transform: scale(1.08); } }
+
+.toast {
+  position: absolute; left: 50%; bottom: calc(70px * var(--s)); transform: translateX(-50%);
+  width: max-content; max-width: 90%; z-index: 10; pointer-events: none; white-space: pre-line; text-align: center;
+  background: rgba(20, 10, 45, .92); border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: calc(12px * var(--s)); padding: calc(10px * var(--s)) calc(16px * var(--s));
+  font-size: calc(15px * var(--s));
+}

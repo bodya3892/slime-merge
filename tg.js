@@ -28,17 +28,22 @@ var Platform = {
       } catch (e) {}
       var u = tg.initDataUnsafe && tg.initDataUnsafe.user;
       if (u && u.language_code) this.lang = u.language_code;
+      // тестовый режим: ссылка t.me/<бот>/play?startapp=debug — Adsgram всегда показывает тестовую рекламу
+      this.debug = tg.initDataUnsafe && tg.initDataUnsafe.start_param === 'debug';
     } else {
       this.lang = (navigator.language || 'ru').slice(0, 2);
     }
     if (window.Adsgram) {
       try {
-        if (ADSGRAM_REWARD_BLOCK) this.reward = window.Adsgram.init({ blockId: ADSGRAM_REWARD_BLOCK });
-        if (ADSGRAM_INTER_BLOCK) this.inter = window.Adsgram.init({ blockId: ADSGRAM_INTER_BLOCK });
-      } catch (e) { console.warn('Adsgram init failed', e); }
+        if (ADSGRAM_REWARD_BLOCK) this.reward = window.Adsgram.init({ blockId: ADSGRAM_REWARD_BLOCK, debug: this.debug });
+        if (ADSGRAM_INTER_BLOCK) this.inter = window.Adsgram.init({ blockId: ADSGRAM_INTER_BLOCK, debug: this.debug });
+      } catch (e) { console.warn('Adsgram init failed', e); this.adError = String(e && e.message || e); }
     }
     return Promise.resolve();
   },
+
+  debug: false,
+  adError: '',  // последний ответ Adsgram, если реклама не показалась (виден в тестовом режиме)
 
   ready: function () {},
   gameplay: function () {},
@@ -49,9 +54,12 @@ var Platform = {
     self.onAdStart();
     return ctrl.show().then(function (r) {
       self.onAdEnd();
-      return !!(r && r.done && !r.error);
-    }, function () {
+      var ok = !!(r && r.done && !r.error);
+      self.adError = ok ? '' : String(r && r.description || 'not done');
+      return ok;
+    }, function (r) {
       self.onAdEnd();
+      self.adError = String(r && (r.description || r.message) || r);
       return false;
     });
   },
