@@ -29,7 +29,8 @@ var Platform = {
       var u = tg.initDataUnsafe && tg.initDataUnsafe.user;
       if (u && u.language_code) this.lang = u.language_code;
       // тестовый режим: ссылка t.me/<бот>/play?startapp=debug — Adsgram всегда показывает тестовую рекламу
-      this.debug = tg.initDataUnsafe && tg.initDataUnsafe.start_param === 'debug';
+      this.debug = (tg.initDataUnsafe && tg.initDataUnsafe.start_param === 'debug') ||
+        /tgWebAppStartParam=debug/.test(location.href);
     } else {
       this.lang = (navigator.language || 'ru').slice(0, 2);
     }

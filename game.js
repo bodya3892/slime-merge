@@ -469,7 +469,7 @@
     Platform.rewarded().then(function (ok) {
       state = prev;
       if (ok) onReward();
-      else toast(tr.noAd + (Platform.debug && Platform.adError ? '\n' + Platform.adError : ''));
+      else toast(tr.noAd + (Platform.adError ? '\n(' + Platform.adError + ')' : ''));
       if (state === 'play') Platform.gameplay(true);
     });
   }
@@ -480,7 +480,7 @@
     el.textContent = msg;
     el.classList.remove('hidden');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { el.classList.add('hidden'); }, Platform.debug ? 8000 : 2500);
+    toastTimer = setTimeout(function () { el.classList.add('hidden'); }, 5000);
   }
 
   // ---------- ввод ----------
