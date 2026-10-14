@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Слаймы: Слияние</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="c"></canvas>
+
+    <div id="hud">
+      <div class="box"><div class="lbl" data-i="score"></div><div class="val" id="score">0</div></div>
+      <div class="box"><div class="lbl" data-i="best"></div><div class="val" id="best">0</div></div>
+      <div class="box"><div class="lbl" data-i="next"></div><canvas id="nextc" width="76" height="76"></canvas></div>
+      <div class="btns">
+        <button class="ib" id="bClean" data-t="clean">💥<span class="adtag">AD</span></button>
+        <button class="ib" id="bSound">🔊</button>
+        <button class="ib" id="bPause">⏸</button>
+      </div>
+    </div>
+
+    <div id="menu" class="overlay">
+      <h1 data-i="title"></h1>
+      <canvas id="logo" width="600" height="280"></canvas>
+      <p class="hint" data-i="hint"></p>
+      <button class="big" id="bPlay" data-i="play"></button>
+      <div class="small"><span data-i="best"></span>: <b id="menuBest">0</b></div>
+    </div>
+
+    <div id="pause" class="overlay hidden">
+      <h2 data-i="paused"></h2>
+      <button class="big" id="bResume" data-i="resume"></button>
+      <button class="big alt" id="bRestart2" data-i="restart"></button>
+    </div>
+
+    <div id="over" class="overlay hidden">
+      <h2 data-i="over"></h2>
+      <div class="final" id="finalScore">0</div>
+      <div class="badge hidden" id="newBest" data-i="newBest"></div>
+      <button class="big ad" id="bContinue"><span data-i="contAd"></span></button>
+      <button class="big" id="bRestart" data-i="restart"></button>
+    </div>
+  </div>
+
+  <script src="slime.js"></script>
+  <script src="audio.js"></script>
+  <script src="tg.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
