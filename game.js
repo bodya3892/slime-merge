@@ -13,15 +13,15 @@
     ru: {
       title: 'Слаймы: Слияние', play: 'Играть', score: 'Очки', best: 'Рекорд', next: 'Далее',
       hint: 'Бросай слаймов и соединяй одинаковых — они сливаются в больших! Не дай им переползти красную линию.',
-      over: 'Игра окончена', restart: 'Заново', contAd: 'Продолжить', paused: 'Пауза', resume: 'Продолжить',
-      newBest: 'Новый рекорд!', combo: 'Комбо', clean: 'Убрать мелких слаймов (реклама)', danger: 'Опасно!',
+      over: 'Игра окончена', restart: 'Заново', contAd: 'Продолжить за рекламу', paused: 'Пауза', resume: 'Продолжить',
+      newBest: 'Новый рекорд!', combo: 'Комбо', clean: 'Посмотри рекламу — уберём самых мелких слаймов (1 раз за игру)', danger: 'Опасно!',
       noAd: 'Реклама пока недоступна, попробуй позже'
     },
     en: {
       title: 'Slime Merge', play: 'Play', score: 'Score', best: 'Best', next: 'Next',
       hint: 'Drop slimes and match the same ones — they merge into bigger slimes! Keep them below the red line.',
-      over: 'Game Over', restart: 'Restart', contAd: 'Continue', paused: 'Paused', resume: 'Resume',
-      newBest: 'New record!', combo: 'Combo', clean: 'Remove small slimes (ad)', danger: 'Danger!',
+      over: 'Game Over', restart: 'Restart', contAd: 'Continue (watch ad)', paused: 'Paused', resume: 'Resume',
+      newBest: 'New record!', combo: 'Combo', clean: 'Watch an ad to remove the smallest slimes (once per game)', danger: 'Danger!',
       noAd: 'Ad is not available yet, try again later'
     }
   };
@@ -33,7 +33,7 @@
 
   var state = 'loading'; // menu | play | pause | over | ad
   var bodies = [], merges = [], particles = [], texts = [];
-  var score = 0, best = 0, maxReached = 0, continued = false;
+  var score = 0, best = 0, maxReached = 0, continued = false, cleanUsed = false;
   var held = null, nextLvl = 0, cooldown = 0, aimX = W / 2;
   var combo = 0, comboTimer = 0, shake = 0, time = 0, dangerFlash = 0;
   var keys = { left: false, right: false };
@@ -414,6 +414,8 @@
   function startGame() {
     bodies = []; merges = []; particles = []; texts = [];
     score = 0; maxReached = 0; continued = false; combo = 0; comboTimer = 0; shake = 0;
+    cleanUsed = false;
+    $('bClean').classList.remove('used');
     $('score').textContent = '0';
     nextLvl = rndLevel();
     spawnHeld();
@@ -526,15 +528,21 @@
     $('bSound').textContent = Sound.on ? '🔊' : '🔇';
     saveProgress();
   });
+  // Награды за рекламу скромные и ограниченные (требование модерации Adsgram):
+  // 💥 — один раз за игру, убирает два самых мелких уровня; «Продолжить» — один раз, убирает слаймов у красной линии.
   onBtn('bClean', function () {
-    if (state !== 'play') return;
-    withRewarded(function () { cleanSmall(2, false); });
+    if (state !== 'play' || cleanUsed) return;
+    withRewarded(function () {
+      cleanUsed = true;
+      $('bClean').classList.add('used');
+      cleanSmall(1, false);
+    });
   });
   onBtn('bContinue', function () {
     if (state !== 'over' || continued) return;
     withRewarded(function () {
       continued = true;
-      cleanSmall(3, true);
+      cleanSmall(-1, true);
       show('over', false);
       state = 'play';
     });
